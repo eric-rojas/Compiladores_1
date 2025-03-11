@@ -8,7 +8,7 @@ import Analizador.Interprete.Simbolo.Arbol;
 public class TestParser {
     public static void main(String[] args) {
         try {
-            String ruta = "src/Analizador/entrada.txt"; // Cambia esto a la ruta de tu archivo
+            String ruta = "Proyecto_compi/src/Analizador/entrada.txt"; // Cambia esto a la ruta de tu archivo
             File file = new File(ruta);
             
             // Crear analizador léxico

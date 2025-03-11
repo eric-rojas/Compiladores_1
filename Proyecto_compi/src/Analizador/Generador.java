@@ -9,7 +9,7 @@ public class Generador {
 
     public static void Generar() {
         try {
-            String ruta = "src/Analizador/";
+            String ruta = "Proyecto_compi/src/Analizador/";
             String[] Flex = {ruta + "lexico.flex", "-d", ruta};
             jflex.Main.generate(Flex);
             String[] Cup = {"-destdir", ruta, "-parser", "parser", ruta + "parser.cup"};

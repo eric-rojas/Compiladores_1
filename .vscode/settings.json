@@ -1,0 +1,8 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\104288730\\Documents\\Eric\\1er semestre 2025\\Compi1\\librerias\\java-cup-11b.jar",
+        "c:\\Users\\104288730\\Documents\\Eric\\1er semestre 2025\\Compi1\\librerias\\java-cup-11b-runtime.jar",
+        "c:\\Users\\104288730\\Documents\\Eric\\1er semestre 2025\\Compi1\\librerias\\jflex-full-1.9.1.jar"
+    ]
+}
