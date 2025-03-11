@@ -1,0 +1,464 @@
+package Analizador;
+
+import Analizador.Interprete.Simbolo.Arbol;
+import Analizador.Interprete.Simbolo.Nativo;
+import Analizador.Interprete.Expresion.Logica;
+import Analizador.Interprete.Expresion.AccionLiteral;
+import Analizador.Interprete.Expresion.VariableRandom;
+import Analizador.Interprete.Expresion.VariableHistorial;
+import Analizador.Interprete.Expresion.VariableRonda;
+import Analizador.Interprete.LlamadaFuncion.GetMovesCount;
+import Analizador.Interprete.LlamadaFuncion.GetLastNMoves;
+import Analizador.Interprete.LlamadaFuncion.GetMove;
+import Analizador.Interprete.LlamadaFuncion.LastMove;
+import Analizador.Interprete.Instruccion.Estrategia;
+import Analizador.Interprete.Instruccion.ReglaCondicional;
+import Analizador.Interprete.Instruccion.ReglaElse;
+import Analizador.Interprete.Instruccion.Juego;
+import Analizador.Interprete.Instruccion.MainSeccion;
+import Analizador.Interprete.Instruccion.Ejecucion;
+import Analizador.Interprete.Abstracto.Instruccion;
+import Analizador.Interprete.Simbolo.TablaSimbolos;
+import Analizador.Interprete.Simbolo.Simbolo;
+
+import java_cup.runtime.Symbol;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
+
+parser code
+{:
+   // Enable debugging
+   public boolean debugMode = true;
+
+   public void syntax_error(Symbol s){
+      System.out.println("Error de sintaxis en línea " + s.left + ", columna " + s.right + ": " + s.value);
+   }
+
+   public void unrecovered_syntax_error(Symbol s){
+      System.out.println("Error irrecuperable de sintaxis en línea " + s.left + ", columna " + s.right + ": " + s.value);
+   }
+
+:}
+
+action code
+{:
+   // código en el constructor del analizador
+:}
+
+// 3. Terminales (tokens que vienen del lexer)
+terminal String STRATEGY, MATCH, MAIN, INITIAL, RULES, PLAYERS, STRATEGIES, ROUNDS, SCORING, RUN, WITH, SEED;
+terminal String ACC; // "D" | "C"
+
+terminal String IF, THEN, ELSE;
+terminal String ASIGNACION, MENORIGUAL, MAYORIGUAL, IGUAL, DIFERENTE, MENOR, MAYOR;
+terminal String AND, OR, NOT;
+
+terminal String LLAVEIZQ, LLAVEDER, CORIZQ, CORDER, PARENTESISIZQ, PARENTESISDER;
+terminal String COMA, DOSPUNTOS, PUNTO;
+terminal String NUMERO, DECIMAL, BOOLEANO, CADENA, IDENTIFICADOR;
+
+terminal String MUTUAL, DEFECTION, REWARD, PUNISHMENT, BETRAYAL, COOPERATION;
+
+// Funciones y expresiones específicas del lenguaje
+terminal ROUND_NUMBER, GET_MOVES_COUNT, GET_LAST_N_MOVES, GET_MOVE, LAST_MOVE, RANDOM, OPPONENT_HISTORY, SELF_HISTORY, TOTAL_ROUNDS, HISTORY;
+
+// 4. No terminales (estructuras sintácticas)
+non terminal ini, entrada;
+non terminal estrategia, definiciones, lista_estrategias, definicion_estrategia, rules;
+non terminal reglas, lista_reglas, expresion;
+non terminal juego, lista_juegos, definicion_juego;
+non terminal parametros, lista_parametros, parametro;
+non terminal main_section, ejecucion, COMPARADOR, llamada_funcion;
+non terminal lista_definicion_juego, definicion_juego_elemento, lista_expresiones;
+
+// 5. Precedencias (para evitar ambigüedades)
+precedence left AND, OR;
+precedence left IGUAL, DIFERENTE;
+precedence left MENOR, MAYOR, MENORIGUAL, MAYORIGUAL;
+precedence right NOT;
+precedence left COMA;
+
+// 6. Producciones (Reglas de la gramática)
+start with ini;
+
+// 6.1 Inicio del programa
+ini ::= entrada:e
+        {:
+            // Aquí debemos construir y retornar el árbol AST
+            System.out.println("Construyendo árbol AST desde la entrada");
+            if (e instanceof ArrayList) {
+                RESULT = new Arbol((ArrayList<Instruccion>)e);
+                System.out.println("Árbol AST construido con " + ((ArrayList<Instruccion>)e).size() + " instrucciones");
+            } else {
+                System.out.println("ERROR: entrada no es de tipo ArrayList<Instruccion>");
+                RESULT = new Arbol(new ArrayList<Instruccion>());
+            }
+        :};
+
+// ArrayList<Instruccion>
+entrada ::= entrada:e lista_estrategias:e1 
+            {:
+                System.out.println("Procesando entrada con múltiples elementos");
+                ArrayList<Instruccion> lista = (ArrayList<Instruccion>)e;
+                if (e1 != null) {
+                    lista.add((Instruccion)e1);
+                    System.out.println("Añadido elemento a la lista. Total: " + lista.size());
+                } else {
+                    System.out.println("ADVERTENCIA: Elemento e1 es null");
+                }
+                RESULT = lista;
+            :}
+            | lista_estrategias:e
+            {:
+                System.out.println("Procesando entrada con un solo elemento");
+                ArrayList<Instruccion> lista = new ArrayList<Instruccion>();
+                if (e != null) {
+                    lista.add((Instruccion)e);
+                    System.out.println("Lista creada con 1 elemento");
+                } else {
+                    System.out.println("ADVERTENCIA: Elemento e es null");
+                }
+                RESULT = lista;
+            :};
+
+// de tipo Instruccion
+lista_estrategias ::= estrategia:e 
+                    {:
+                        System.out.println("Detectada definición de estrategia");
+                        RESULT = e;
+                    :}
+                    | juego:e
+                    {:
+                        System.out.println("Detectada definición de juego");
+                        RESULT = e;
+                    :}
+                    | main_section:e
+                    {:
+                        System.out.println("Detectada sección main");
+                        RESULT = e;
+                    :};
+
+estrategia ::= STRATEGY:s IDENTIFICADOR:id LLAVEIZQ definiciones:defs LLAVEDER
+            {:
+                System.out.println("Procesando estrategia: " + id);
+                // Aquí extraer inicial y reglas de definiciones
+                if (defs instanceof Object[]) {
+                    Object[] defsArray = (Object[])defs;
+                    Instruccion inicial = (Instruccion)defsArray[0];
+                    List<Instruccion> reglas = (List<Instruccion>)defsArray[1];
+                    RESULT = new Estrategia(id, inicial, reglas, sleft, sright);
+                    System.out.println("Estrategia creada: " + id + " con " + reglas.size() + " reglas");
+                } else {
+                    System.out.println("ERROR: definiciones no tiene el formato esperado");
+                    RESULT = null;
+                }
+            :};
+
+definiciones ::= definicion_estrategia:inicial rules:reglas
+                {:
+                    System.out.println("Procesando definiciones de estrategia");
+                    // Devolver un array con inicial y reglas
+                    Object[] resultado = new Object[2];
+                    resultado[0] = inicial;
+                    resultado[1] = reglas;
+                    RESULT = resultado;
+                :};
+
+definicion_estrategia ::= INITIAL DOSPUNTOS expresion:e
+                        {:
+                            System.out.println("Procesando definición inicial");
+                            RESULT = e;
+                        :};
+
+rules ::= RULES DOSPUNTOS CORIZQ lista_reglas:reglas CORDER
+        {:
+            System.out.println("Procesando reglas");
+            RESULT = reglas;
+        :};
+
+lista_reglas ::= lista_reglas:lista COMA reglas:regla
+                {:
+                    System.out.println("Añadiendo regla a la lista");
+                    ArrayList<Instruccion> listaReglas = (ArrayList<Instruccion>)lista;
+                    listaReglas.add((Instruccion)regla);
+                    RESULT = listaReglas;
+                :}
+               | reglas:regla
+               {:
+                   System.out.println("Creando lista con la primera regla");
+                   ArrayList<Instruccion> listaReglas = new ArrayList<Instruccion>();
+                   listaReglas.add((Instruccion)regla);
+                   RESULT = listaReglas;
+               :};
+
+reglas ::= IF expresion:condicion THEN expresion:accionVerdadera
+         {:
+             System.out.println("Procesando regla condicional if-then");
+             //RESULT = new ReglaCondicional(condicion, accionVerdadera, null, condicionleft, condicionright);
+             RESULT = new ReglaCondicional((Instruccion)condicion, (Instruccion)accionVerdadera, null, condicionleft, condicionright);
+         :}
+         | ELSE expresion:accion
+         {:
+             System.out.println("Procesando regla else");
+             RESULT = new ReglaElse((Instruccion)accion, accionleft, accionright);
+         :};
+
+// Definición de expresiones
+expresion ::= NUMERO:n
+            {:
+                System.out.println("Procesando número: " + n);
+                RESULT = new Nativo(Double.parseDouble(n), nleft, nright);
+            :}
+            | DECIMAL:d
+            {:
+                System.out.println("Procesando decimal: " + d);
+                RESULT = new Nativo(Double.parseDouble(d), dleft, dright);
+            :}
+            | ACC:a
+            {:
+                System.out.println("Procesando acción: " + a);
+                RESULT = new AccionLiteral(a, aleft, aright);
+            :}
+            | BOOLEANO:b
+            {:
+                System.out.println("Procesando booleano: " + b);
+                RESULT = new Nativo(Boolean.parseBoolean(b), bleft, bright);
+            :}
+            | RANDOM:r
+            {:
+                System.out.println("Procesando random");
+                RESULT = new VariableRandom(rleft, rright);
+            :}
+            | OPPONENT_HISTORY:o
+            {:
+                System.out.println("Procesando historial del oponente");
+                RESULT = new VariableHistorial(VariableHistorial.TipoHistorial.OPONENTE, oleft, oright);
+            :}
+            | SELF_HISTORY:s
+            {:
+                System.out.println("Procesando historial propio");
+                RESULT = new VariableHistorial(VariableHistorial.TipoHistorial.PROPIO, sleft, sright);
+            :}
+            | TOTAL_ROUNDS:t
+            {:
+                System.out.println("Procesando total de rondas");
+                RESULT = new VariableRonda(VariableRonda.TipoRonda.TOTAL, tleft, tright);
+            :}
+            | ROUND_NUMBER:r
+            {:
+                System.out.println("Procesando número de ronda");
+                RESULT = new VariableRonda(VariableRonda.TipoRonda.NUMERO_ACTUAL, rleft, rright);
+            :}
+            | HISTORY:h
+            {:
+                System.out.println("Procesando historial general");
+                RESULT = new VariableHistorial(VariableHistorial.TipoHistorial.GENERAL, hleft, hright);
+            :}
+            | llamada_funcion:f
+            {:
+                System.out.println("Procesando llamada a función");
+                RESULT = f;
+            :}
+            | expresion:e1 MENORIGUAL expresion:e2
+            {:
+                System.out.println("Procesando operación <=");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "<=", e1left, e1right);
+            :}
+            | expresion:e1 MAYORIGUAL expresion:e2
+            {:
+                System.out.println("Procesando operación >=");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, ">=", e1left, e1right);
+            :}
+            | expresion:e1 IGUAL expresion:e2
+            {:
+                System.out.println("Procesando operación ==");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "==", e1left, e1right);
+            :}
+            | expresion:e1 MENOR expresion:e2
+            {:
+                System.out.println("Procesando operación <");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "<", e1left, e1right);
+            :}
+            | expresion:e1 MAYOR expresion:e2
+            {:
+                System.out.println("Procesando operación >");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, ">", e1left, e1right);
+            :}
+            | expresion:e1 DIFERENTE expresion:e2
+            {:
+                System.out.println("Procesando operación !=");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "!=", e1left, e1right);
+            :}
+            | expresion:e1 AND expresion:e2
+            {:
+                System.out.println("Procesando operación &&");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "&&", e1left, e1right);
+            :}
+            | expresion:e1 OR expresion:e2
+            {:
+                System.out.println("Procesando operación ||");
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "||", e1left, e1right);
+            :}
+            | expresion:e1 NOT expresion:e2
+            {:
+                System.out.println("Procesando operación NOT");
+                // Aquí implementar la operación NOT según tu estructura
+                RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "NOT", e1left, e1right);
+            :};
+
+lista_expresiones ::= lista_expresiones:lista COMA expresion:expr
+                    {:
+                        System.out.println("Añadiendo expresión a lista");
+                        ArrayList<Instruccion> listaExpresiones = (ArrayList<Instruccion>)lista;
+                        listaExpresiones.add((Instruccion)expr);
+                        RESULT = listaExpresiones;
+                    :}
+                    | expresion:expr
+                    {:
+                        System.out.println("Creando lista con primera expresión");
+                        ArrayList<Instruccion> listaExpresiones = new ArrayList<Instruccion>();
+                        listaExpresiones.add((Instruccion)expr);
+                        RESULT = listaExpresiones;
+                    :};
+
+// Definición de llamadas a funciones
+llamada_funcion ::= GET_MOVES_COUNT:g PARENTESISIZQ expresion:e1 COMA expresion:e2 PARENTESISDER
+                  {:
+                      System.out.println("Procesando llamada a get_moves_count");
+                      RESULT = new GetMovesCount((Instruccion)e1, (Instruccion)e2, gleft, gright);
+                  :}
+                  | GET_LAST_N_MOVES:g PARENTESISIZQ expresion:e1 COMA expresion:e2 PARENTESISDER IGUAL CORIZQ lista_expresiones:lista CORDER
+                  {:
+                      System.out.println("Procesando llamada a get_last_n_moves con comparación");
+                      // Aquí implementar según tu estructura
+                      //RESULT = new GetLastNMoves(e1, e2, gleft, gright);
+                      RESULT = new GetLastNMoves((Instruccion)e1, (Instruccion)e2, gleft, gright);
+                  :}
+                  | GET_MOVE:g PARENTESISIZQ expresion:e1 COMA expresion:e2 PARENTESISDER
+                  {:
+                      System.out.println("Procesando llamada a get_move");
+                      //RESULT = new GetMove(e1, e2, gleft, gright);
+                      RESULT = new GetMove((Instruccion)e1, (Instruccion)e2, gleft, gright);
+                  :}
+                  | LAST_MOVE:l PARENTESISIZQ expresion:e1 PARENTESISDER
+                  {:
+                      System.out.println("Procesando llamada a last_move");
+                      //RESULT = new LastMove(e1, lleft, lright);
+                      RESULT = new LastMove((Instruccion)e1, lleft, lright);
+                  :};
+
+// 6.3 Definición de juegos (Match)
+juego ::= MATCH:m IDENTIFICADOR:id definicion_juego:def
+        {:
+            System.out.println("Procesando juego: " + id);
+            // Aquí procesar la definición del juego según tu estructura
+            // Podría ser algo como:
+            // RESULT = new Juego(id, estrategias, rondas, configuracionPuntaje, mleft, mright);
+            RESULT = null; // Reemplazar con la creación adecuada
+        :};
+
+definicion_juego ::= LLAVEIZQ lista_definicion_juego:defs LLAVEDER
+                    {:
+                        System.out.println("Procesando definición de juego");
+                        RESULT = defs;
+                    :};
+
+lista_definicion_juego ::= lista_definicion_juego:lista definicion_juego_elemento:elem
+                        {:
+                            System.out.println("Añadiendo elemento a definición de juego");
+                            // Aquí agregar el elemento a la lista según tu estructura
+                            RESULT = null; // Reemplazar con la lógica adecuada
+                        :}
+                        | definicion_juego_elemento:elem
+                        {:
+                            System.out.println("Iniciando lista de definición de juego");
+                            // Aquí iniciar la lista con el primer elemento
+                            RESULT = elem;
+                        :};
+
+definicion_juego_elemento ::= PLAYERS STRATEGIES DOSPUNTOS CORIZQ IDENTIFICADOR:e1 COMA IDENTIFICADOR:e2 CORDER
+                            {:
+                                System.out.println("Procesando estrategias de jugadores: " + e1 + ", " + e2);
+                                // Aquí guardar las estrategias según tu estructura
+                                RESULT = new String[]{e1, e2};
+                            :}
+                            | ROUNDS DOSPUNTOS expresion:e
+                            {:
+                                System.out.println("Procesando número de rondas");
+                                RESULT = e;
+                            :}
+                            | SCORING DOSPUNTOS LLAVEIZQ parametros:params LLAVEDER
+                            {:
+                                System.out.println("Procesando configuración de puntaje");
+                                RESULT = params;
+                            :};
+
+parametros ::= parametro:p
+             {:
+                 System.out.println("Iniciando mapa de parámetros");
+                 RESULT = p;
+             :}
+             | parametros:params COMA parametro:p
+             {:
+                 System.out.println("Añadiendo parámetro a mapa");
+                 // Aquí combinar los parámetros según tu estructura
+                 if (params instanceof Map && p instanceof Map) {
+                     Map<String, Instruccion> mapaResultante = new HashMap<>((Map<String, Instruccion>)params);
+                     mapaResultante.putAll((Map<String, Instruccion>)p);
+                     RESULT = mapaResultante;
+                 } else {
+                     System.out.println("ERROR: Formato inesperado en parámetros");
+                     RESULT = new HashMap<String, Instruccion>();
+                 }
+             :};
+
+parametro ::= MUTUAL:m COOPERATION:c DOSPUNTOS expresion:e
+            {:
+                System.out.println("Procesando parámetro mutual cooperation");
+                Map<String, Instruccion> parametro = new HashMap<>();
+                parametro.put("mutual cooperation", (Instruccion)e);
+                RESULT = parametro;
+            :}
+            | MUTUAL:m DEFECTION:d DOSPUNTOS expresion:e
+            {:
+                System.out.println("Procesando parámetro mutual defection");
+                Map<String, Instruccion> parametro = new HashMap<>();
+                parametro.put("mutual defection", (Instruccion)e);
+                RESULT = parametro;
+            :}
+            | BETRAYAL:b REWARD:r DOSPUNTOS expresion:e
+            {:
+                System.out.println("Procesando parámetro betrayal reward");
+                Map<String, Instruccion> parametro = new HashMap<>();
+                parametro.put("betrayal reward", (Instruccion)e);
+                RESULT = parametro;
+            :}
+            | BETRAYAL:b PUNISHMENT:p DOSPUNTOS expresion:e
+            {:
+                System.out.println("Procesando parámetro betrayal punishment");
+                Map<String, Instruccion> parametro = new HashMap<>();
+                parametro.put("betrayal punishment", (Instruccion)e);
+                RESULT = parametro;
+            :};
+
+// 6.4 Sección Main
+main_section ::= MAIN:m LLAVEIZQ ejecucion:e LLAVEDER
+                {:
+                    System.out.println("Procesando sección main");
+                    //RESULT = new MainSeccion(e, mleft, mright);
+                    RESULT = new MainSeccion((Instruccion)e, mleft, mright);
+                :};
+
+ejecucion ::= RUN:r CORIZQ IDENTIFICADOR:id CORDER WITH LLAVEIZQ SEED DOSPUNTOS NUMERO:n LLAVEDER
+            {:
+                System.out.println("Procesando ejecución con juego: " + id + " y semilla: " + n);
+                List<String> juegos = new ArrayList<>();
+                juegos.add(id);
+                RESULT = new Ejecucion(juegos, Long.parseLong(n), rleft, rright);
+            :};
+
+
+

@@ -1,0 +1,7 @@
+strategy Simple {
+    initial: D
+    rules: [
+        if round_number <= 2 then D,
+        else D
+    ]
+}
