@@ -70,14 +70,17 @@ public class TablaSimbolos {
     }
     
     public void setJuego(String nombre, Juego juego) {
+        System.out.println("Guardando juego '" + nombre + "' en tabla de símbolos");
         juegos.put(nombre, juego);
     }
     
     public boolean existeJuego(String nombre) {
-        if (juegos.containsKey(nombre)) {
-            return true;
+        boolean existe = juegos.containsKey(nombre);
+        System.out.println("Verificando si existe juego '" + nombre + "': " + existe);
+        if (!existe && padre != null) {
+            return padre.existeJuego(nombre);
         }
-        return padre != null && padre.existeJuego(nombre);
+        return existe;
     }
     
     public Juego getJuego(String nombre) {

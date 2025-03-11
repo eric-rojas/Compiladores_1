@@ -23,18 +23,8 @@ public class Ejecucion extends Instruccion {
         // Guardar la semilla en la tabla de símbolos
         tabla.setSimbolo(new Simbolo("SEED", semilla));
         
-        // Ejecutar cada juego
-        for (String nombreJuego : nombresJuegos) {
-            if (tabla.existeJuego(nombreJuego)) {
-                Juego juego = tabla.getJuego(nombreJuego);
-                
-                // Aquí se realizaría la simulación del juego
-                // Esto probablemente lo harías en una clase separada
-                // como Simulador.java
-            }
-        }
-        
-        return null;
+        // Importante: Retornar this para que MainSeccion pueda obtener la instancia
+        return this;
     }
     
     public List<String> getNombresJuegos() {

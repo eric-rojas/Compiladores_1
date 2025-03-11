@@ -2,7 +2,7 @@ package Analizador.Interprete.Expresion;
 
 import Analizador.Interprete.Abstracto.Instruccion;
 
-import java.util.List;
+
 import Analizador.Interprete.Simbolo.TablaSimbolos;
 /**
  * Clase que representa las variables de historial (opponent_history, self_history)

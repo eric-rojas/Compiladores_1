@@ -410,7 +410,7 @@ public class parser extends java_cup.runtime.lr_parser {
 
    public void syntax_error(Symbol s){
       System.out.println("Error de sintaxis en línea " + s.left + ", columna " + s.right + ": " + s.value);
-   }
+   }  
 
    public void unrecovered_syntax_error(Symbol s){
       System.out.println("Error irrecuperable de sintaxis en línea " + s.left + ", columna " + s.right + ": " + s.value);
@@ -1196,10 +1196,43 @@ class CUP$parser$actions {
 		Object def = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
             System.out.println("Procesando juego: " + id);
-            // Aquí procesar la definición del juego según tu estructura
-            // Podría ser algo como:
-            // RESULT = new Juego(id, estrategias, rondas, configuracionPuntaje, mleft, mright);
-            RESULT = null; // Reemplazar con la creación adecuada
+            // Extraer información del objeto def
+            try {
+                // Vamos a asumir que def es un objeto que contiene los elementos de definición del juego
+                if (def instanceof Object[]) {
+                    Object[] defArray = (Object[]) def;
+                    String[] estrategias = null;
+                    Instruccion rondas = null;
+                    Map<String, Instruccion> configPuntaje = null;
+                    
+                    // Extraer componentes de la definición
+                    for (Object item : defArray) {
+                        if (item instanceof String[]) {
+                            estrategias = (String[]) item;
+                        } else if (item instanceof Instruccion && rondas == null) {
+                            rondas = (Instruccion) item;
+                        } else if (item instanceof Map) {
+                            configPuntaje = (Map<String, Instruccion>) item;
+                        }
+                    }
+                    
+                    // Crear el objeto Juego
+                    RESULT = new Juego(id, estrategias, rondas, configPuntaje, mleft, mright);
+                    System.out.println("Juego creado: " + id);
+                } else {
+                    System.out.println("ERROR: Definición de juego en formato inesperado: " + 
+                                      (def != null ? def.getClass().getName() : "null"));
+                    // Crear un juego con valores por defecto para evitar error
+                    RESULT = new Juego(id, new String[]{"Estrategia1", "Estrategia2"}, 
+                                      new Nativo(100, mleft, mright), new HashMap<>(), mleft, mright);
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR al crear juego: " + e.getMessage());
+                e.printStackTrace();
+                // Crear juego con valores por defecto
+                RESULT = new Juego(id, new String[]{"Estrategia1", "Estrategia2"}, 
+                                  new Nativo(100, mleft, mright), new HashMap<>(), mleft, mright);
+            }
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("juego",10, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1232,8 +1265,29 @@ class CUP$parser$actions {
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
                             System.out.println("Añadiendo elemento a definición de juego");
-                            // Aquí agregar el elemento a la lista según tu estructura
-                            RESULT = null; // Reemplazar con la lógica adecuada
+                            // Crear un array de objetos para almacenar los elementos
+                            Object[] result = new Object[3]; // estrategias, rondas, puntajes
+                            
+                            // Si lista ya es un array, copiar sus valores
+                            if (lista instanceof Object[]) {
+                                Object[] listaArray = (Object[]) lista;
+                                for (int i = 0; i < listaArray.length && i < result.length; i++) {
+                                    if (listaArray[i] != null) {
+                                        result[i] = listaArray[i];
+                                    }
+                                }
+                            }
+                            
+                            // Añadir el nuevo elemento (elem) en la posición adecuada
+                            if (elem instanceof String[]) {
+                                result[0] = elem; // estrategias
+                            } else if (elem instanceof Instruccion) {
+                                result[1] = elem; // rondas
+                            } else if (elem instanceof Map) {
+                                result[2] = elem; // configuración de puntaje
+                            }
+                            
+                            RESULT = result;
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("lista_definicion_juego",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1248,8 +1302,19 @@ class CUP$parser$actions {
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
                             System.out.println("Iniciando lista de definición de juego");
-                            // Aquí iniciar la lista con el primer elemento
-                            RESULT = elem;
+                            // Crear un array para un solo elemento
+                            Object[] result = new Object[3]; // estrategias, rondas, puntajes
+                            
+                            // Colocar elem en la posición adecuada
+                            if (elem instanceof String[]) {
+                                result[0] = elem; // estrategias
+                            } else if (elem instanceof Instruccion) {
+                                result[1] = elem; // rondas
+                            } else if (elem instanceof Map) {
+                                result[2] = elem; // configuración de puntaje
+                            }
+                            
+                            RESULT = result;
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("lista_definicion_juego",20, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
