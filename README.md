@@ -175,7 +175,7 @@ src
 |------------NodoAST.java (clase para todos los nodos del AST)
 |---------Expresion
 |------------Logica.java (Clase que maneja operaciones lógicas y comparaciones entre expresiones)
-|------------Aritmetica.java (Para operaciones aritméticas si las necesitas)
+|------------Aritmetica.java (Para operaciones aritméticas)
 |------------Literal.java (Para representar literales como números, strings, etc.)
 |------------AccionLiteral.java (Para representar acciones como C o D)
 |------------Random.java (Para la función random)
