@@ -1,3 +1,5 @@
+// comentario normal
+
 strategy Graaskamp {
     initial: D
     rules: [
@@ -7,6 +9,9 @@ strategy Graaskamp {
         else last_move(opponent_history)
     ]
 }
+/*
+comentario multi
+*/
 
 strategy Random {
     initial: C
