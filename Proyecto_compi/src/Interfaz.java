@@ -69,10 +69,10 @@ public class Interfaz extends JFrame {
         txtAreaEntrada = new JTextArea();
         txtAreaEntrada.setFont(new Font("Monospaced", Font.PLAIN, 12));
         txtAreaEntrada.setBackground(Color.BLACK);
-        txtAreaEntrada.setForeground(Color.WHITE);
+        txtAreaEntrada.setForeground(new Color(128, 0, 128));
         txtAreaEntrada.setCaretColor(Color.WHITE);
         JScrollPane scrollEntrada = new JScrollPane(txtAreaEntrada);
-        scrollEntrada.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        scrollEntrada.setBorder(BorderFactory.createLineBorder(new Color(128, 0, 128)));
         
         panelEntrada.add(lblEntrada, BorderLayout.NORTH);
         panelEntrada.add(scrollEntrada, BorderLayout.CENTER);
@@ -89,10 +89,10 @@ public class Interfaz extends JFrame {
         txtAreaReporte = new JTextArea();
         txtAreaReporte.setFont(new Font("Monospaced", Font.PLAIN, 12));
         txtAreaReporte.setBackground(Color.BLACK);
-        txtAreaReporte.setForeground(Color.WHITE);
+        txtAreaReporte.setForeground(new Color(128, 0, 128));
         txtAreaReporte.setEditable(false);
         JScrollPane scrollReporte = new JScrollPane(txtAreaReporte);
-        scrollReporte.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        scrollReporte.setBorder(BorderFactory.createLineBorder(new Color(128, 0, 128)));
         
         panelReporte.add(lblReporte, BorderLayout.NORTH);
         panelReporte.add(scrollReporte, BorderLayout.CENTER);
@@ -116,7 +116,7 @@ public class Interfaz extends JFrame {
         txtAreaSalida.setForeground(Color.WHITE);
         txtAreaSalida.setEditable(false);
         JScrollPane scrollSalida = new JScrollPane(txtAreaSalida);
-        scrollSalida.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        scrollSalida.setBorder(BorderFactory.createLineBorder(new Color(128, 0, 128)));
         
         panelSalida.add(lblSalida, BorderLayout.NORTH);
         panelSalida.add(scrollSalida, BorderLayout.CENTER);

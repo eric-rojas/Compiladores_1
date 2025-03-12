@@ -3,7 +3,7 @@ Desarrollo de lenguaje compilador
 
 
 
-## como es la entrada?
+## Entrada
 
 
 ```
@@ -46,7 +46,7 @@ main {
 
 
 
-## como es la gramatica basica que se creo?
+## Gramatica base
 
 
 ```
@@ -163,7 +163,7 @@ ejecucion ::= RUN CORIZQ IDENTIFICADOR:e1 CORDER WITH LLAVEIZQ SEED DOSPUNTOS NU
 
 
 
-## Arquitectura que se usa
+## Arquitectura 
 
 
 ```
@@ -202,7 +202,7 @@ src
 |------Simulador.java (Clase para simular la ejecución del juego con las estrategias definidas)
 |------lexico.flex (Archivo de configuración para el analizador léxico, define los tokens del lenguaje)
 |------parser.cup (Archivo de configuración para el analizador sintáctico, define la gramática del lenguaje)
-|---InterfazDMDP.java (Interfaz gráfica)
+|---Interfaz.java (Interfaz gráfica)
 |---Main.java (Punto de entrada de la aplicación)
 ```
 
