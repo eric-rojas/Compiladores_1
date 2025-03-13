@@ -109,6 +109,7 @@ expresion ::= NUMERO:e
             | expresion:e1 AND expresion:e2
             | expresion:e1 OR expresion:e2
             | expresion:e1 NOT expresion:e2;
+//            | IGUAL CORIZQ lista_expresiones CORDER
 
 lista_expresiones ::= lista_expresiones COMA expresion
                     | expresion;

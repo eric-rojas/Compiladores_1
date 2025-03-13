@@ -1,5 +1,4 @@
 package Analizador.Interprete.Simbolo;
-import Analizador.Interprete.Simbolo.TablaSimbolos;
 import Analizador.Interprete.Abstracto.Instruccion;
 import java.util.ArrayList;
 

@@ -34,7 +34,7 @@ public class Simulador {
     /**
      * Ejecuta la simulación completa
      */
-    public void ejecutar() {
+    /*public void ejecutar() {
         try {
             System.out.println("Iniciando simulación del Dilema del Prisionero...");
             
@@ -79,6 +79,54 @@ public class Simulador {
                 }
             } else {
                 System.err.println("Error: La sección main no retornó una ejecución válida");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error durante la simulación: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }*/
+
+    public void ejecutar() {
+        try {
+            System.out.println("Iniciando simulación del Dilema del Prisionero...");
+            
+            // Ejecutar todas las instrucciones para registrar estrategias y juegos
+            for (Instruccion instruccion : ast.getInstrucciones()) {
+                instruccion.ejecutar(tablaGlobal);
+            }
+            
+            // Buscar la sección main para ejecutar los juegos
+            MainSeccion seccionMain = null;
+            for (Instruccion instruccion : ast.getInstrucciones()) {
+                if (instruccion instanceof MainSeccion) {
+                    seccionMain = (MainSeccion) instruccion;
+                    break;
+                }
+            }
+            
+            if (seccionMain == null) {
+                System.err.println("Error: No se encontró la sección main");
+                return;
+            }
+            
+            // Ejecutar todas las ejecuciones
+            for (Instruccion instrEjecucion : seccionMain.getEjecuciones()) {
+                if (instrEjecucion instanceof Ejecucion) {
+                    Ejecucion ejecucion = (Ejecucion) instrEjecucion;
+                    List<String> nombresJuegos = ejecucion.getNombresJuegos();
+                    long semilla = ejecucion.getSemilla();
+                    
+                    // Ejecutar cada juego especificado
+                    for (String nombreJuego : nombresJuegos) {
+                        if (tablaGlobal.existeJuego(nombreJuego)) {
+                            Juego juego = tablaGlobal.getJuego(nombreJuego);
+                            simularJuego(juego, semilla);
+                        } else {
+                            System.err.println("Error: El juego '" + nombreJuego + "' no está definido");
+                        }
+                    }
+                }
             }
             
         } catch (Exception e) {

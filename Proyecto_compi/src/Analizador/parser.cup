@@ -1,11 +1,14 @@
 package Analizador;
 
+
 import Analizador.Interprete.Simbolo.Arbol;
 import Analizador.Interprete.Simbolo.Nativo;
 import Analizador.Interprete.Expresion.Logica;
 import Analizador.Interprete.Expresion.AccionLiteral;
 import Analizador.Interprete.Expresion.VariableRandom;
 import Analizador.Interprete.Expresion.VariableHistorial;
+import Analizador.Interprete.Expresion.ComparacionListaFuncion;
+import Analizador.Interprete.Expresion.ComparacionLista;
 import Analizador.Interprete.Expresion.VariableRonda;
 import Analizador.Interprete.LlamadaFuncion.GetMovesCount;
 import Analizador.Interprete.LlamadaFuncion.GetLastNMoves;
@@ -71,7 +74,7 @@ non terminal estrategia, definiciones, lista_estrategias, definicion_estrategia,
 non terminal reglas, lista_reglas, expresion;
 non terminal juego, lista_juegos, definicion_juego;
 non terminal parametros, lista_parametros, parametro;
-non terminal main_section, ejecucion, COMPARADOR, llamada_funcion;
+non terminal main_section, ejecucion, COMPARADOR, llamada_funcion, lista_ejecuciones, lista_identificadores, expresion_llamada_funcion;
 non terminal lista_definicion_juego, definicion_juego_elemento, lista_expresiones;
 
 // 5. Precedencias (para evitar ambigüedades)
@@ -331,24 +334,33 @@ llamada_funcion ::= GET_MOVES_COUNT:g PARENTESISIZQ expresion:e1 COMA expresion:
                       RESULT = new GetMovesCount((Instruccion)e1, (Instruccion)e2, gleft, gright);
                   :}
                   | GET_LAST_N_MOVES:g PARENTESISIZQ expresion:e1 COMA expresion:e2 PARENTESISDER IGUAL CORIZQ lista_expresiones:lista CORDER
-                  {:
-                      System.out.println("Procesando llamada a get_last_n_moves con comparación");
-                      // Aquí implementar según tu estructura
-                      //RESULT = new GetLastNMoves(e1, e2, gleft, gright);
-                      RESULT = new GetLastNMoves((Instruccion)e1, (Instruccion)e2, gleft, gright);
-                  :}
+                    {:
+                        System.out.println("Procesando comparación de get_last_n_moves con lista");
+                        RESULT = new ComparacionListaFuncion((Instruccion)e1, (Instruccion)e2, (List<Instruccion>)lista, gleft, gright);
+                    :}
                   | GET_MOVE:g PARENTESISIZQ expresion:e1 COMA expresion:e2 PARENTESISDER
                   {:
                       System.out.println("Procesando llamada a get_move");
-                      //RESULT = new GetMove(e1, e2, gleft, gright);
                       RESULT = new GetMove((Instruccion)e1, (Instruccion)e2, gleft, gright);
                   :}
                   | LAST_MOVE:l PARENTESISIZQ expresion:e1 PARENTESISDER
                   {:
                       System.out.println("Procesando llamada a last_move");
-                      //RESULT = new LastMove(e1, lleft, lright);
                       RESULT = new LastMove((Instruccion)e1, lleft, lright);
                   :};
+
+/*
+// manejar la comparación con lista
+expresion_llamada_funcion ::= llamada_funcion:f IGUAL CORIZQ lista_expresiones:lista CORDER
+            {:
+                System.out.println("Procesando comparación de función con lista");
+                // Crear una operación de comparación entre el resultado de la función y la lista
+                RESULT = new ComparacionLista((Instruccion)f, (List<Instruccion>)lista, fleft, fright);
+            :}
+            | /* Resto de reglas para expresión 
+            
+
+*/
 
 // 6.3 Definición de juegos (Match)
 juego ::= MATCH:m IDENTIFICADOR:id definicion_juego:def
@@ -509,6 +521,7 @@ parametro ::= MUTUAL:m COOPERATION:c DOSPUNTOS expresion:e
                 RESULT = parametro;
             :};
 
+/*
 // 6.4 Sección Main
 main_section ::= MAIN:m LLAVEIZQ ejecucion:e LLAVEDER
                 {:
@@ -524,6 +537,53 @@ ejecucion ::= RUN:r CORIZQ IDENTIFICADOR:id CORDER WITH LLAVEIZQ SEED DOSPUNTOS 
                 juegos.add(id);
                 RESULT = new Ejecucion(juegos, Long.parseLong(n), rleft, rright);
             :};
+*/
+
+// 6.4 Sección Main
+main_section ::= MAIN:m LLAVEIZQ lista_ejecuciones:le LLAVEDER
+                {:
+                    System.out.println("Procesando sección main con " + ((List)le).size() + " ejecuciones");
+                    RESULT = new MainSeccion((List<Instruccion>)le, mleft, mright);
+                :};
+
+// Lista de ejecuciones (permite múltiples "run")
+lista_ejecuciones ::= lista_ejecuciones:le ejecucion:e
+                    {:
+                        System.out.println("Agregando ejecución a la lista");
+                        List<Instruccion> lista = (List<Instruccion>)le;
+                        lista.add((Instruccion)e);
+                        RESULT = lista;
+                    :}
+                    | ejecucion:e
+                    {:
+                        System.out.println("Creando lista con primera ejecución");
+                        List<Instruccion> lista = new ArrayList<>();
+                        lista.add((Instruccion)e);
+                        RESULT = lista;
+                    :};
+
+// Ejecución individual
+ejecucion ::= RUN:r CORIZQ lista_identificadores:li CORDER WITH LLAVEIZQ SEED DOSPUNTOS NUMERO:n LLAVEDER
+            {:
+                System.out.println("Procesando ejecución con " + ((List)li).size() + " juegos y semilla: " + n);
+                RESULT = new Ejecucion((List<String>)li, Long.parseLong(n), rleft, rright);
+            :};
+
+// Lista de identificadores (permite múltiples juegos en un run)
+lista_identificadores ::= lista_identificadores:li COMA IDENTIFICADOR:id
+                        {:
+                            System.out.println("Agregando juego " + id + " a la lista");
+                            List<String> lista = (List<String>)li;
+                            lista.add(id);
+                            RESULT = lista;
+                        :}
+                        | IDENTIFICADOR:id
+                        {:
+                            System.out.println("Creando lista con primer juego: " + id);
+                            List<String> lista = new ArrayList<>();
+                            lista.add(id);
+                            RESULT = lista;
+                        :};
 
 
 

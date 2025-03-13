@@ -475,6 +475,7 @@ public class Scanner implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
+    public ArrayList<String> errores = new ArrayList<>();
    // Código Java que te sirva al principio del archivo
    // normalmente para inicialzar variables
 
@@ -905,7 +906,7 @@ public class Scanner implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { System.out.println("Error en la linea " + yyline + " columna " + yycolumn + ": " + yytext());
+            { errores.add("Error en la linea " + yyline + " columna " + yycolumn + ": " + yytext());
             }
           // fall through
           case 61: break;

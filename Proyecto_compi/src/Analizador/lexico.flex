@@ -6,6 +6,7 @@ import java.util.ArrayList;
 %%
 
 %{
+    public ArrayList<String> errores = new ArrayList<>();
    // Código Java que te sirva al principio del archivo
    // normalmente para inicialzar variables
 %}
@@ -245,4 +246,4 @@ ESPACIOS = [ \t\n\r\f]+
 
 {ESPACIOS} { /* Ignorar espacios */ }
 
-. { System.out.println("Error en la linea " + yyline + " columna " + yycolumn + ": " + yytext()); }
+. { errores.add("Error en la linea " + yyline + " columna " + yycolumn + ": " + yytext());}

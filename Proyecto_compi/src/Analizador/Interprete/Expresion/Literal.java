@@ -2,7 +2,7 @@ package Analizador.Interprete.Expresion;
 
 import Analizador.Interprete.Abstracto.Instruccion;
 import Analizador.Interprete.Simbolo.TablaSimbolos;
-import Analizador.Interprete.Simbolo.TablaSimbolos;
+
 /**
  * Clase que representa un valor literal como número, booleano, cadena, etc.
  */

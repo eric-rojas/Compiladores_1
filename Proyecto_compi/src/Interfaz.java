@@ -315,7 +315,7 @@ public class Interfaz extends JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private void ejecutarCodigo() {
         try {
             // Limpiar áreas de salida y reporte
@@ -324,6 +324,28 @@ public class Interfaz extends JFrame {
             
             // Crear analizador léxico con el texto de entrada
             String input = txtAreaEntrada.getText();
+            
+            // Paso 1: Hacer un análisis léxico preliminar para detectar errores
+            Analizador.Scanner preLexer = new Analizador.Scanner(new java.io.StringReader(input));
+            
+            // Consumir todos los tokens para detectar errores
+            while (true) {
+                Symbol token = preLexer.next_token();
+                if (token.sym == Analizador.sym.EOF) break;
+            }
+            
+            // Verificar si hay errores léxicos
+            if (!preLexer.errores.isEmpty()) {
+                txtAreaSalida.append("ERROR: No se puede ejecutar debido a errores léxicos\n\n");
+                txtAreaSalida.append("Lista de errores encontrados:\n");
+                
+                for (String error : preLexer.errores) {
+                    txtAreaSalida.append("- " + error + "\n");
+                }
+                
+                // Terminar la ejecución
+                return;
+            }
             
             // Redirigir la salida estándar para capturarla
             TextAreaOutputStream taos = new TextAreaOutputStream(txtAreaSalida);
@@ -338,25 +360,35 @@ public class Interfaz extends JFrame {
             System.setErr(printOut);
             
             try {
-                // Crear analizador léxico y sintáctico
+                // Crear un nuevo analizador léxico y sintáctico para el análisis real
                 Analizador.Scanner lexer = new Analizador.Scanner(new java.io.StringReader(input));
                 Analizador.parser p = new Analizador.parser(lexer);
                 
-                // Parsear el archivo
-                Symbol s = p.parse();
-                
-                // Obtener el AST
-                if (s != null && s.value instanceof Arbol) {
-                    Arbol ast = (Arbol) s.value;
+                // Intentar parsear
+                try {
+                    Symbol s = p.parse();
                     
-                    txtAreaSalida.append("Análisis completado exitosamente.\n");
-                    txtAreaSalida.append("Número de instrucciones: " + ast.getInstrucciones().size() + "\n\n");
-                    
-                    // Crear y ejecutar el simulador
-                    Simulador simulador = new Simulador(ast);
-                    simulador.ejecutar();
-                } else {
-                    txtAreaSalida.append("Error: No se pudo construir el AST\n");
+                    // Verificar si hay errores sintácticos (que podrían no haber lanzado excepción)
+                    if (lexer.errores.isEmpty()) {
+                        // Solo ejecutar si no hay errores
+                        if (s != null && s.value instanceof Arbol) {
+                            Arbol ast = (Arbol) s.value;
+                            
+                            txtAreaSalida.append("Análisis completado exitosamente.\n");
+                            txtAreaSalida.append("Número de instrucciones: " + ast.getInstrucciones().size() + "\n\n");
+                            
+                            // Crear y ejecutar el simulador
+                            Simulador simulador = new Simulador(ast);
+                            simulador.ejecutar();
+                        } else {
+                            txtAreaSalida.append("Error: No se pudo construir el AST\n");
+                        }
+                    } else {
+                        txtAreaSalida.append("ERROR: No se puede ejecutar debido a errores sintácticos\n");
+                    }
+                } catch (Exception ex) {
+                    txtAreaSalida.append("ERROR: No se puede ejecutar debido a errores durante el análisis\n");
+                    txtAreaSalida.append("Detalles: " + ex.getMessage() + "\n");
                 }
             } finally {
                 // Restaurar la salida estándar
@@ -407,39 +439,23 @@ public class Interfaz extends JFrame {
             // Limpiar área de reporte
             txtAreaReporte.setText("");
             
-            // Crear analizador léxico y sintáctico con el texto de entrada
+            // Crear analizador léxico con el texto de entrada
             String input = txtAreaEntrada.getText();
             Analizador.Scanner lexer = new Analizador.Scanner(new java.io.StringReader(input));
+            
+            // Parsear el archivo para capturar errores
             Analizador.parser p = new Analizador.parser(lexer);
+            p.parse(); // Esto llenará el ArrayList de errores en el lexer
             
-            // Redirigir la salida de errores a un buffer
-            List<String> errorMessages = new ArrayList<>();
-            
-            // ParseController para capturar errores
-            ErrorCaptureStream errorCapture = new ErrorCaptureStream(errorMessages);
-            
-            // Guardar la salida estándar original
-            PrintStream originalErr = System.err;
-            
-            // Redirigir la salida de error
-            System.setErr(new PrintStream(errorCapture));
-            
-            try {
-                // Intentar parsear y capturar errores
-                p.parse();
-            } catch (Exception ex) {
-                // Los errores ya fueron capturados en errorMessages
-            } finally {
-                // Restaurar la salida estándar
-                System.setErr(originalErr);
-            }
+            // Obtener la lista de errores del lexer
+            ArrayList<String> errores = lexer.errores;
             
             txtAreaReporte.append("=== REPORTE DE ERRORES ===\n\n");
             
-            if (errorMessages.isEmpty()) {
+            if (errores.isEmpty()) {
                 txtAreaReporte.append("No se encontraron errores.\n");
             } else {
-                for (String error : errorMessages) {
+                for (String error : errores) {
                     txtAreaReporte.append(error + "\n");
                 }
             }
