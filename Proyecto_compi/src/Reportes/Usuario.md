@@ -23,7 +23,7 @@ Esta aplicación permite simular el Dilema del Prisionero, un concepto clásico 
 
 ### Vista General
 
-![Interfaz principal](Reportes/Imagenes/1.png)
+![Interfaz principal](src/Reportes/Imagenes/1.png)
 
 La interfaz cuenta con las siguientes áreas principales:
 
