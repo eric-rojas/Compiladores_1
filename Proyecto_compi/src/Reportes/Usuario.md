@@ -22,7 +22,7 @@ Owner
 
 ## Interfaz de Usuario
 
-![Interfaz principal](1.png)
+![Interfaz principal](Imagenes/1.png)
 
 
 La interfaz cuenta con las siguientes áreas principales:
