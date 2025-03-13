@@ -8,6 +8,8 @@ import Analizador.Interprete.Instruccion.Juego;
 import Analizador.Interprete.Instruccion.Estrategia;
 import Analizador.Interprete.Instruccion.MainSeccion;
 import Analizador.Interprete.Instruccion.Ejecucion;
+import Analizador.Interprete.Util.RandomGenerator;
+import Analizador.Interprete.Util.DeterministicRandomGenerator;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -89,7 +91,7 @@ public class Simulador {
 
     public void ejecutar() {
         try {
-            System.out.println("Iniciando simulación del Dilema del Prisionero...");
+            //System.out.println("Iniciando simulación del Dilema del Prisionero...");
             
             // Ejecutar todas las instrucciones para registrar estrategias y juegos
             for (Instruccion instruccion : ast.getInstrucciones()) {
@@ -135,11 +137,6 @@ public class Simulador {
         }
     }
     
-    /**
-     * Simula un juego específico
-     * @param juego Juego a simular
-     * @param semilla Semilla para el generador de números aleatorios
-     */
     public void simularJuego(Juego juego, long semilla) {
         System.out.println("\n=== Partida: " + juego.getNombre() + " ===");
         
@@ -183,9 +180,8 @@ public class Simulador {
         int puntajeJugador1 = 0;
         int puntajeJugador2 = 0;
         
-        // Inicializar generadores de números aleatorios con la semilla
-        Random random1 = new Random(semilla);
-        Random random2 = new Random(semilla);
+        // Inicializar UN SOLO generador de números aleatorios con la semilla
+        RandomGenerator random = DeterministicRandomGenerator.create(semilla);
         
         System.out.println("\nDesarrollo:");
         
@@ -200,14 +196,14 @@ public class Simulador {
             contextoJugador1.setSimbolo(new Simbolo("TOTAL_ROUNDS", numRondas));
             contextoJugador1.setSimbolo(new Simbolo("OPPONENT_HISTORY", new ArrayList<>(historialJugador2)));
             contextoJugador1.setSimbolo(new Simbolo("SELF_HISTORY", new ArrayList<>(historialJugador1)));
-            contextoJugador1.setSimbolo(new Simbolo("RANDOM", random1.nextDouble()));
+            contextoJugador1.setSimbolo(new Simbolo("RANDOM", random.nextDouble()));
             
             // Establecer estados del sistema para el jugador 2
             contextoJugador2.setSimbolo(new Simbolo("ROUND_NUMBER", ronda));
             contextoJugador2.setSimbolo(new Simbolo("TOTAL_ROUNDS", numRondas));
             contextoJugador2.setSimbolo(new Simbolo("OPPONENT_HISTORY", new ArrayList<>(historialJugador1)));
             contextoJugador2.setSimbolo(new Simbolo("SELF_HISTORY", new ArrayList<>(historialJugador2)));
-            contextoJugador2.setSimbolo(new Simbolo("RANDOM", random2.nextDouble()));
+            contextoJugador2.setSimbolo(new Simbolo("RANDOM", random.nextDouble()));
             
             // Ejecutar estrategias para determinar movimientos
             String movimientoJugador1 = estrategia1.ejecutarReglas(contextoJugador1);
@@ -224,9 +220,9 @@ public class Simulador {
             
             // Mostrar resultado de la ronda
             System.out.println("Ronda " + (ronda + 1) + ": " + 
-                               nombresEstrategias[0] + "=" + movimientoJugador1 + ", " + 
-                               nombresEstrategias[1] + "=" + movimientoJugador2 + " (" + 
-                               puntajesRonda[0] + "-" + puntajesRonda[1] + ")");
+                              nombresEstrategias[0] + "=" + movimientoJugador1 + ", " + 
+                              nombresEstrategias[1] + "=" + movimientoJugador2 + " (" + 
+                              puntajesRonda[0] + "-" + puntajesRonda[1] + ")");
         }
         
         // Mostrar resumen final

@@ -24,7 +24,7 @@ public class Juego extends Instruccion {
     @Override
     public Object ejecutar(TablaSimbolos tabla) {
         // Registrar el juego en la tabla de símbolos
-        System.out.println("Registrando juego: " + nombre + " en la tabla de símbolos");
+        //System.out.println("Registrando juego: " + nombre + " en la tabla de símbolos");
         tabla.setJuego(nombre, this);
         return nombre;
     }

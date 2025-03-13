@@ -25,12 +25,12 @@ public class Logica extends Instruccion {
         if (operador.equals("&&")) {
             // Evaluamos primero el lado izquierdo
             Object valorIzq = izquierdo.ejecutar(tabla);
-            System.out.println("Evaluando operación lógica: " + operador);
-            System.out.println("  Valor izquierdo: " + valorIzq + " (" + (valorIzq != null ? valorIzq.getClass().getName() : "null") + ")");
+            //System.out.println("Evaluando operación lógica: " + operador);
+            //System.out.println("  Valor izquierdo: " + valorIzq + " (" + (valorIzq != null ? valorIzq.getClass().getName() : "null") + ")");
             
             // Si el lado izquierdo no es booleano o es falso, retornamos falso sin evaluar el lado derecho
             if (!(valorIzq instanceof Boolean)) {
-                System.err.println("Error: Operación && requiere operandos booleanos");
+                //System.err.println("Error: Operación && requiere operandos booleanos");
                 return false;
             }
             
@@ -41,29 +41,29 @@ public class Logica extends Instruccion {
             
             // Si el lado izquierdo es verdadero, evaluamos el lado derecho
             Object valorDer = derecho.ejecutar(tabla);
-            System.out.println("  Valor derecho: " + valorDer + " (" + (valorDer != null ? valorDer.getClass().getName() : "null") + ")");
+            //System.out.println("  Valor derecho: " + valorDer + " (" + (valorDer != null ? valorDer.getClass().getName() : "null") + ")");
             
             // Si el lado derecho es una lista, evaluamos si debería ser una comparación
             if (valorDer instanceof List) {
-                System.out.println("Lado derecho es una lista, evaluando si debería ser una comparación");
+                //System.out.println("Lado derecho es una lista, evaluando si debería ser una comparación");
                 // En este caso, probablemente queríamos hacer una comparación y no un AND lógico
-                System.err.println("Error: Operación && requiere operandos booleanos, se encontró una lista");
+                //System.err.println("Error: Operación && requiere operandos booleanos, se encontró una lista");
                 return false;
             } else if (valorDer instanceof Boolean) {
                 return (Boolean)valorDer; // Ya sabemos que valorIzq es true
             } else {
-                System.err.println("Error: Operación && requiere operandos booleanos");
+                //System.err.println("Error: Operación && requiere operandos booleanos");
                 return false;
             }
         } else if (operador.equals("||")) {
             // Evaluamos primero el lado izquierdo
             Object valorIzq = izquierdo.ejecutar(tabla);
-            System.out.println("Evaluando operación lógica: " + operador);
-            System.out.println("  Valor izquierdo: " + valorIzq + " (" + (valorIzq != null ? valorIzq.getClass().getName() : "null") + ")");
+            //System.out.println("Evaluando operación lógica: " + operador);
+            //System.out.println("  Valor izquierdo: " + valorIzq + " (" + (valorIzq != null ? valorIzq.getClass().getName() : "null") + ")");
             
             // Si el lado izquierdo no es booleano, reportamos error
             if (!(valorIzq instanceof Boolean)) {
-                System.err.println("Error: Operación || requiere operandos booleanos");
+                //System.err.println("Error: Operación || requiere operandos booleanos");
                 return false;
             }
             
@@ -74,12 +74,12 @@ public class Logica extends Instruccion {
             
             // Si el lado izquierdo es falso, evaluamos el lado derecho
             Object valorDer = derecho.ejecutar(tabla);
-            System.out.println("  Valor derecho: " + valorDer + " (" + (valorDer != null ? valorDer.getClass().getName() : "null") + ")");
+            //System.out.println("  Valor derecho: " + valorDer + " (" + (valorDer != null ? valorDer.getClass().getName() : "null") + ")");
             
             if (valorDer instanceof Boolean) {
                 return (Boolean)valorDer;
             } else {
-                System.err.println("Error: Operación || requiere operandos booleanos");
+                //System.err.println("Error: Operación || requiere operandos booleanos");
                 return false;
             }
         } else {
@@ -88,9 +88,9 @@ public class Logica extends Instruccion {
             Object valorDer = derecho.ejecutar(tabla);
             
             // Imprimir información de depuración
-            System.out.println("Evaluando operación lógica: " + operador);
-            System.out.println("  Valor izquierdo: " + valorIzq + " (" + (valorIzq != null ? valorIzq.getClass().getName() : "null") + ")");
-            System.out.println("  Valor derecho: " + valorDer + " (" + (valorDer != null ? valorDer.getClass().getName() : "null") + ")");
+            //System.out.println("Evaluando operación lógica: " + operador);
+            //System.out.println("  Valor izquierdo: " + valorIzq + " (" + (valorIzq != null ? valorIzq.getClass().getName() : "null") + ")");
+            //System.out.println("  Valor derecho: " + valorDer + " (" + (valorDer != null ? valorDer.getClass().getName() : "null") + ")");
             
             switch (operador) {
                 case "==":

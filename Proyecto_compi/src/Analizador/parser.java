@@ -477,12 +477,12 @@ class CUP$parser$actions {
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
             // Aquí debemos construir y retornar el árbol AST
-            System.out.println("Construyendo árbol AST desde la entrada");
+            //System.out.println("Construyendo árbol AST desde la entrada");
             if (e instanceof ArrayList) {
                 RESULT = new Arbol((ArrayList<Instruccion>)e);
-                System.out.println("Árbol AST construido con " + ((ArrayList<Instruccion>)e).size() + " instrucciones");
+                //System.out.println("Árbol AST construido con " + ((ArrayList<Instruccion>)e).size() + " instrucciones");
             } else {
-                System.out.println("ERROR: entrada no es de tipo ArrayList<Instruccion>");
+                //System.out.println("ERROR: entrada no es de tipo ArrayList<Instruccion>");
                 RESULT = new Arbol(new ArrayList<Instruccion>());
             }
         
@@ -501,13 +501,13 @@ class CUP$parser$actions {
 		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando entrada con múltiples elementos");
+                //System.out.println("Procesando entrada con múltiples elementos");
                 ArrayList<Instruccion> lista = (ArrayList<Instruccion>)e;
                 if (e1 != null) {
                     lista.add((Instruccion)e1);
-                    System.out.println("Añadido elemento a la lista. Total: " + lista.size());
+                    //System.out.println("Añadido elemento a la lista. Total: " + lista.size());
                 } else {
-                    System.out.println("ADVERTENCIA: Elemento e1 es null");
+                    //System.out.println("ADVERTENCIA: Elemento e1 es null");
                 }
                 RESULT = lista;
             
@@ -523,13 +523,13 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando entrada con un solo elemento");
+                //System.out.println("Procesando entrada con un solo elemento");
                 ArrayList<Instruccion> lista = new ArrayList<Instruccion>();
                 if (e != null) {
                     lista.add((Instruccion)e);
-                    System.out.println("Lista creada con 1 elemento");
+                    //System.out.println("Lista creada con 1 elemento");
                 } else {
-                    System.out.println("ADVERTENCIA: Elemento e es null");
+                    //System.out.println("ADVERTENCIA: Elemento e es null");
                 }
                 RESULT = lista;
             
@@ -545,7 +545,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        System.out.println("Detectada definición de estrategia");
+                        //System.out.println("Detectada definición de estrategia");
                         RESULT = e;
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("lista_estrategias",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -560,7 +560,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        System.out.println("Detectada definición de juego");
+                        //System.out.println("Detectada definición de juego");
                         RESULT = e;
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("lista_estrategias",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -575,7 +575,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        System.out.println("Detectada sección main");
+                        //System.out.println("Detectada sección main");
                         RESULT = e;
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("lista_estrategias",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -596,16 +596,16 @@ class CUP$parser$actions {
 		int defsright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object defs = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                System.out.println("Procesando estrategia: " + id);
+                //System.out.println("Procesando estrategia: " + id);
                 // Aquí extraer inicial y reglas de definiciones
                 if (defs instanceof Object[]) {
                     Object[] defsArray = (Object[])defs;
                     Instruccion inicial = (Instruccion)defsArray[0];
                     List<Instruccion> reglas = (List<Instruccion>)defsArray[1];
                     RESULT = new Estrategia(id, inicial, reglas, sleft, sright);
-                    System.out.println("Estrategia creada: " + id + " con " + reglas.size() + " reglas");
+                    //System.out.println("Estrategia creada: " + id + " con " + reglas.size() + " reglas");
                 } else {
-                    System.out.println("ERROR: definiciones no tiene el formato esperado");
+                    //System.out.println("ERROR: definiciones no tiene el formato esperado");
                     RESULT = null;
                 }
             
@@ -624,7 +624,7 @@ class CUP$parser$actions {
 		int reglasright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object reglas = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                    System.out.println("Procesando definiciones de estrategia");
+                    //System.out.println("Procesando definiciones de estrategia");
                     // Devolver un array con inicial y reglas
                     Object[] resultado = new Object[2];
                     resultado[0] = inicial;
@@ -643,7 +643,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                            System.out.println("Procesando definición inicial");
+                            //System.out.println("Procesando definición inicial");
                             RESULT = e;
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("definicion_estrategia",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -658,7 +658,7 @@ class CUP$parser$actions {
 		int reglasright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object reglas = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-            System.out.println("Procesando reglas");
+            //System.out.println("Procesando reglas");
             RESULT = reglas;
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("rules",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -676,7 +676,7 @@ class CUP$parser$actions {
 		int reglaright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object regla = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                    System.out.println("Añadiendo regla a la lista");
+                    //System.out.println("Añadiendo regla a la lista");
                     ArrayList<Instruccion> listaReglas = (ArrayList<Instruccion>)lista;
                     listaReglas.add((Instruccion)regla);
                     RESULT = listaReglas;
@@ -693,7 +693,7 @@ class CUP$parser$actions {
 		int reglaright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object regla = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                   System.out.println("Creando lista con la primera regla");
+                   //System.out.println("Creando lista con la primera regla");
                    ArrayList<Instruccion> listaReglas = new ArrayList<Instruccion>();
                    listaReglas.add((Instruccion)regla);
                    RESULT = listaReglas;
@@ -713,7 +713,7 @@ class CUP$parser$actions {
 		int accionVerdaderaright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object accionVerdadera = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-             System.out.println("Procesando regla condicional if-then");
+             //System.out.println("Procesando regla condicional if-then");
              //RESULT = new ReglaCondicional(condicion, accionVerdadera, null, condicionleft, condicionright);
              RESULT = new ReglaCondicional((Instruccion)condicion, (Instruccion)accionVerdadera, null, condicionleft, condicionright);
          
@@ -729,7 +729,7 @@ class CUP$parser$actions {
 		int accionright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object accion = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-             System.out.println("Procesando regla else");
+             //System.out.println("Procesando regla else");
              RESULT = new ReglaElse((Instruccion)accion, accionleft, accionright);
          
               CUP$parser$result = parser.getSymbolFactory().newSymbol("reglas",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -744,7 +744,7 @@ class CUP$parser$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando número: " + n);
+                //System.out.println("Procesando número: " + n);
                 RESULT = new Nativo(Double.parseDouble(n), nleft, nright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -759,7 +759,7 @@ class CUP$parser$actions {
 		int dright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String d = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando decimal: " + d);
+                //System.out.println("Procesando decimal: " + d);
                 RESULT = new Nativo(Double.parseDouble(d), dleft, dright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -774,7 +774,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando acción: " + a);
+                //System.out.println("Procesando acción: " + a);
                 RESULT = new AccionLiteral(a, aleft, aright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -789,7 +789,7 @@ class CUP$parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando booleano: " + b);
+                //System.out.println("Procesando booleano: " + b);
                 RESULT = new Nativo(Boolean.parseBoolean(b), bleft, bright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -804,7 +804,7 @@ class CUP$parser$actions {
 		int rright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object r = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando random");
+                //System.out.println("Procesando random");
                 RESULT = new VariableRandom(rleft, rright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -819,7 +819,7 @@ class CUP$parser$actions {
 		int oright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object o = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando historial del oponente");
+                //System.out.println("Procesando historial del oponente");
                 RESULT = new VariableHistorial(VariableHistorial.TipoHistorial.OPONENTE, oleft, oright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -834,7 +834,7 @@ class CUP$parser$actions {
 		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object s = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando historial propio");
+                //System.out.println("Procesando historial propio");
                 RESULT = new VariableHistorial(VariableHistorial.TipoHistorial.PROPIO, sleft, sright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -849,7 +849,7 @@ class CUP$parser$actions {
 		int tright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando total de rondas");
+                //System.out.println("Procesando total de rondas");
                 RESULT = new VariableRonda(VariableRonda.TipoRonda.TOTAL, tleft, tright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -864,7 +864,7 @@ class CUP$parser$actions {
 		int rright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object r = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando número de ronda");
+                //System.out.println("Procesando número de ronda");
                 RESULT = new VariableRonda(VariableRonda.TipoRonda.NUMERO_ACTUAL, rleft, rright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -879,7 +879,7 @@ class CUP$parser$actions {
 		int hright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object h = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando historial general");
+                //System.out.println("Procesando historial general");
                 RESULT = new VariableHistorial(VariableHistorial.TipoHistorial.GENERAL, hleft, hright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -894,7 +894,7 @@ class CUP$parser$actions {
 		int fright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object f = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando llamada a función");
+                //System.out.println("Procesando llamada a función");
                 RESULT = f;
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -912,7 +912,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación <=");
+                //System.out.println("Procesando operación <=");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "<=", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -930,7 +930,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación >=");
+                //System.out.println("Procesando operación >=");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, ">=", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -948,7 +948,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación ==");
+                //System.out.println("Procesando operación ==");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "==", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -966,7 +966,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación <");
+                //System.out.println("Procesando operación <");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "<", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -984,7 +984,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación >");
+                //System.out.println("Procesando operación >");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, ">", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1002,7 +1002,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación !=");
+                //System.out.println("Procesando operación !=");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "!=", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1020,7 +1020,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación &&");
+                //System.out.println("Procesando operación &&");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "&&", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1038,7 +1038,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación ||");
+                //System.out.println("Procesando operación ||");
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "||", e1left, e1right);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("expresion",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1056,7 +1056,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando operación NOT");
+                //System.out.println("Procesando operación NOT");
                 // Aquí implementar la operación NOT según tu estructura
                 RESULT = new Logica((Instruccion)e1, (Instruccion)e2, "NOT", e1left, e1right);
             
@@ -1075,7 +1075,7 @@ class CUP$parser$actions {
 		int exprright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object expr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        System.out.println("Añadiendo expresión a lista");
+                        //System.out.println("Añadiendo expresión a lista");
                         ArrayList<Instruccion> listaExpresiones = (ArrayList<Instruccion>)lista;
                         listaExpresiones.add((Instruccion)expr);
                         RESULT = listaExpresiones;
@@ -1092,7 +1092,7 @@ class CUP$parser$actions {
 		int exprright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object expr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        System.out.println("Creando lista con primera expresión");
+                        //System.out.println("Creando lista con primera expresión");
                         ArrayList<Instruccion> listaExpresiones = new ArrayList<Instruccion>();
                         listaExpresiones.add((Instruccion)expr);
                         RESULT = listaExpresiones;
@@ -1115,7 +1115,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                      System.out.println("Procesando llamada a get_moves_count");
+                      //System.out.println("Procesando llamada a get_moves_count");
                       RESULT = new GetMovesCount((Instruccion)e1, (Instruccion)e2, gleft, gright);
                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("llamada_funcion",19, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1139,7 +1139,7 @@ class CUP$parser$actions {
 		int listaright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object lista = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                        System.out.println("Procesando comparación de get_last_n_moves con lista");
+                        //System.out.println("Procesando comparación de get_last_n_moves con lista");
                         RESULT = new ComparacionListaFuncion((Instruccion)e1, (Instruccion)e2, (List<Instruccion>)lista, gleft, gright);
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("llamada_funcion",19, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1160,7 +1160,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                      System.out.println("Procesando llamada a get_move");
+                      //System.out.println("Procesando llamada a get_move");
                       RESULT = new GetMove((Instruccion)e1, (Instruccion)e2, gleft, gright);
                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("llamada_funcion",19, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1178,7 +1178,7 @@ class CUP$parser$actions {
 		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                      System.out.println("Procesando llamada a last_move");
+                      //System.out.println("Procesando llamada a last_move");
                       RESULT = new LastMove((Instruccion)e1, lleft, lright);
                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("llamada_funcion",19, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1199,7 +1199,7 @@ class CUP$parser$actions {
 		int defright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object def = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-            System.out.println("Procesando juego: " + id);
+            //System.out.println("Procesando juego: " + id);
             // Extraer información del objeto def
             try {
                 // Vamos a asumir que def es un objeto que contiene los elementos de definición del juego
@@ -1222,16 +1222,16 @@ class CUP$parser$actions {
                     
                     // Crear el objeto Juego
                     RESULT = new Juego(id, estrategias, rondas, configPuntaje, mleft, mright);
-                    System.out.println("Juego creado: " + id);
+                    //System.out.println("Juego creado: " + id);
                 } else {
-                    System.out.println("ERROR: Definición de juego en formato inesperado: " + 
-                                      (def != null ? def.getClass().getName() : "null"));
+                    //System.out.println("ERROR: Definición de juego en formato inesperado: " + 
+                                      //(def != null ? def.getClass().getName() : "null"());
                     // Crear un juego con valores por defecto para evitar error
                     RESULT = new Juego(id, new String[]{"Estrategia1", "Estrategia2"}, 
                                       new Nativo(100, mleft, mright), new HashMap<>(), mleft, mright);
                 }
             } catch (Exception e) {
-                System.out.println("ERROR al crear juego: " + e.getMessage());
+                //System.out.println("ERROR al crear juego: " + e.getMessage());
                 e.printStackTrace();
                 // Crear juego con valores por defecto
                 RESULT = new Juego(id, new String[]{"Estrategia1", "Estrategia2"}, 
@@ -1250,7 +1250,7 @@ class CUP$parser$actions {
 		int defsright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object defs = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                        System.out.println("Procesando definición de juego");
+                        //System.out.println("Procesando definición de juego");
                         RESULT = defs;
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("definicion_juego",12, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1268,7 +1268,7 @@ class CUP$parser$actions {
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                            System.out.println("Añadiendo elemento a definición de juego");
+                            //System.out.println("Añadiendo elemento a definición de juego");
                             // Crear un array de objetos para almacenar los elementos
                             Object[] result = new Object[3]; // estrategias, rondas, puntajes
                             
@@ -1305,7 +1305,7 @@ class CUP$parser$actions {
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                            System.out.println("Iniciando lista de definición de juego");
+                            //System.out.println("Iniciando lista de definición de juego");
                             // Crear un array para un solo elemento
                             Object[] result = new Object[3]; // estrategias, rondas, puntajes
                             
@@ -1335,7 +1335,7 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String e2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                                System.out.println("Procesando estrategias de jugadores: " + e1 + ", " + e2);
+                                //System.out.println("Procesando estrategias de jugadores: " + e1 + ", " + e2);
                                 // Aquí guardar las estrategias según tu estructura
                                 RESULT = new String[]{e1, e2};
                             
@@ -1351,7 +1351,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                                System.out.println("Procesando número de rondas");
+                               // System.out.println("Procesando número de rondas");
                                 RESULT = e;
                             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("definicion_juego_elemento",24, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1366,7 +1366,7 @@ class CUP$parser$actions {
 		int paramsright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object params = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                                System.out.println("Procesando configuración de puntaje");
+                                //System.out.println("Procesando configuración de puntaje");
                                 RESULT = params;
                             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("definicion_juego_elemento",24, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1381,7 +1381,7 @@ class CUP$parser$actions {
 		int pright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object p = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                 System.out.println("Iniciando mapa de parámetros");
+                 //System.out.println("Iniciando mapa de parámetros");
                  RESULT = p;
              
               CUP$parser$result = parser.getSymbolFactory().newSymbol("parametros",13, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1399,14 +1399,14 @@ class CUP$parser$actions {
 		int pright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object p = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                 System.out.println("Añadiendo parámetro a mapa");
-                 // Aquí combinar los parámetros según tu estructura
+                 //System.out.println("Añadiendo parámetro a mapa");
+                 
                  if (params instanceof Map && p instanceof Map) {
                      Map<String, Instruccion> mapaResultante = new HashMap<>((Map<String, Instruccion>)params);
                      mapaResultante.putAll((Map<String, Instruccion>)p);
                      RESULT = mapaResultante;
                  } else {
-                     System.out.println("ERROR: Formato inesperado en parámetros");
+                     //System.out.println("ERROR: Formato inesperado en parámetros");
                      RESULT = new HashMap<String, Instruccion>();
                  }
              
@@ -1428,7 +1428,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando parámetro mutual cooperation");
+                //System.out.println("Procesando parámetro mutual cooperation");
                 Map<String, Instruccion> parametro = new HashMap<>();
                 parametro.put("mutual cooperation", (Instruccion)e);
                 RESULT = parametro;
@@ -1451,7 +1451,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando parámetro mutual defection");
+                //System.out.println("Procesando parámetro mutual defection");
                 Map<String, Instruccion> parametro = new HashMap<>();
                 parametro.put("mutual defection", (Instruccion)e);
                 RESULT = parametro;
@@ -1474,7 +1474,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando parámetro betrayal reward");
+                //System.out.println("Procesando parámetro betrayal reward");
                 Map<String, Instruccion> parametro = new HashMap<>();
                 parametro.put("betrayal reward", (Instruccion)e);
                 RESULT = parametro;
@@ -1497,7 +1497,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                System.out.println("Procesando parámetro betrayal punishment");
+                //System.out.println("Procesando parámetro betrayal punishment");
                 Map<String, Instruccion> parametro = new HashMap<>();
                 parametro.put("betrayal punishment", (Instruccion)e);
                 RESULT = parametro;
@@ -1517,7 +1517,7 @@ class CUP$parser$actions {
 		int leright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object le = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                    System.out.println("Procesando sección main con " + ((List)le).size() + " ejecuciones");
+                    //System.out.println("Procesando sección main con " + ((List)le).size() + " ejecuciones");
                     RESULT = new MainSeccion((List<Instruccion>)le, mleft, mright);
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("main_section",16, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1535,7 +1535,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        System.out.println("Agregando ejecución a la lista");
+                        //System.out.println("Agregando ejecución a la lista");
                         List<Instruccion> lista = (List<Instruccion>)le;
                         lista.add((Instruccion)e);
                         RESULT = lista;
@@ -1552,7 +1552,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        System.out.println("Creando lista con primera ejecución");
+                        //System.out.println("Creando lista con primera ejecución");
                         List<Instruccion> lista = new ArrayList<>();
                         lista.add((Instruccion)e);
                         RESULT = lista;
@@ -1575,7 +1575,7 @@ class CUP$parser$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                System.out.println("Procesando ejecución con " + ((List)li).size() + " juegos y semilla: " + n);
+                //System.out.println("Procesando ejecución con " + ((List)li).size() + " juegos y semilla: " + n);
                 RESULT = new Ejecucion((List<String>)li, Long.parseLong(n), rleft, rright);
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ejecucion",17, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1593,7 +1593,7 @@ class CUP$parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                            System.out.println("Agregando juego " + id + " a la lista");
+                            //System.out.println("Agregando juego " + id + " a la lista");
                             List<String> lista = (List<String>)li;
                             lista.add(id);
                             RESULT = lista;
@@ -1610,7 +1610,7 @@ class CUP$parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                            System.out.println("Creando lista con primer juego: " + id);
+                            //System.out.println("Creando lista con primer juego: " + id);
                             List<String> lista = new ArrayList<>();
                             lista.add(id);
                             RESULT = lista;
