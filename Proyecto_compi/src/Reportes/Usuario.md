@@ -25,6 +25,7 @@ Esta aplicación permite simular el Dilema del Prisionero, un concepto clásico 
 
 ![Interfaz principal](1.png)
 
+
 La interfaz cuenta con las siguientes áreas principales:
 
 1. **Barra de menú**: Acceso a funciones como abrir/guardar archivos y generar reportes.
@@ -45,7 +46,7 @@ La interfaz cuenta con las siguientes áreas principales:
 2. Navegue hasta el archivo deseado (**extensión .cmp**) y ábralo.
 3. El contenido se cargará en el área de edición.
 
-![Abrir archivo](2.png)
+![Abrir archivo](Reportes/Imagenes/2.png)
 *Diálogo de apertura de archivos*
 
 ### Guardar un Archivo
@@ -61,7 +62,7 @@ La interfaz cuenta con las siguientes áreas principales:
 3. Los resultados aparecerán en el área de salida.
 4. Si hay errores, se mostrarán mensajes descriptivos.
 
-![Resultados de la ejecución](3.png)
+![Resultados de la ejecución](Reportes/Imagenes/3.png)
 *Resultados de una simulación exitosa*
 
 ### Generar Reportes
@@ -70,7 +71,7 @@ La interfaz cuenta con las siguientes áreas principales:
    - **"Reportes > Reporte de Tokens"** para ver todos los tokens identificados.
    - **"Reportes > Reporte de Errores"** para ver errores léxicos o sintácticos.
 
-![Reporte de tokens](3.png)
+![Reporte de tokens](Reportes/Imagenes/4.png)
 *Ejemplo de reporte de tokens*
 
 ## Sintaxis del Lenguaje
