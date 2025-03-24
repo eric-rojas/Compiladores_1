@@ -2,11 +2,18 @@
 Desarrollo de lenguaje compilador 
 
 
+## Consejo de Creador
+>Si desea aprender hacerca de compiladores:
+>para más detalles sobre **Como crear un compilador** [Creacion.md](./Creacion.md).
+
+> Para más detalles técnicos sobre el lenguaje y su implementación [Tecnico.md](./Proyecto_compi/src/Reportes/Tecnico.md).
+
+> Para información sobre cómo utilizar el proyecto [Usuario.md](./Proyecto_compi/src/Reportes/Usuario.md).
 
 ## Entrada
 
 
-```
+```txt
 strategy Graaskamp {
     initial: D
     rules: [
@@ -49,7 +56,7 @@ main {
 ## Gramatica base
 
 
-```
+```java
 // 6. Producciones (Reglas de la gramática)
 start with ini;
 
@@ -167,7 +174,8 @@ ejecucion ::= RUN CORIZQ IDENTIFICADOR:e1 CORDER WITH LLAVEIZQ SEED DOSPUNTOS NU
 ## Arquitectura 
 
 
-```
+```java
+
 src
 |---Analizador
 |------Interprete

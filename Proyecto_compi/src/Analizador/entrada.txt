@@ -11,7 +11,7 @@ strategy SteinRapoport {
     ]
 }
 
-strategy Joss {
+strategy Joss { 
     initial: C
     rules: [
         if random < 0.1 then D,

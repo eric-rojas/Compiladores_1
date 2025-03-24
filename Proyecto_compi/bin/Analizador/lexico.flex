@@ -6,6 +6,7 @@ import java.util.ArrayList;
 %%
 
 %{
+    public ArrayList<String> errores = new ArrayList<>();
    // Código Java que te sirva al principio del archivo
    // normalmente para inicialzar variables
 %}
@@ -148,8 +149,14 @@ HISTORY = "history"
 IDENTIFICADOR = [a-zA-Z][a-zA-Z0-9_]*
 
 // Comentarios
-COMENTARIO = "//".*"\n"
-COMENTARIO2 = "/\*".*"\*/"
+//COMENTARIO = "//".*"\n"
+//COMENTARIO2 = "/\*"(~"\*/")*"\*/"
+
+// Comentarios de una línea
+COMENTARIO = "//"([^\r\n]*)?
+
+// Comentarios multilínea (permitiendo múltiples líneas correctamente)
+COMENTARIO2 = [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 
 ESPACIOS = [ \t\n\r\f]+
 
@@ -234,9 +241,9 @@ ESPACIOS = [ \t\n\r\f]+
 
 {IDENTIFICADOR} { return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext()); }
 
-{COMENTARIO} { /* Ignorar comentarios */ }
-{COMENTARIO2} { /* Ignorar comentarios */ }
+{COMENTARIO}  { /* Ignorar comentarios de una línea */ }
+{COMENTARIO2} { /* Ignorar comentarios multilínea */ }
 
 {ESPACIOS} { /* Ignorar espacios */ }
 
-. { System.out.println("Error en la linea " + yyline + " columna " + yycolumn + ": " + yytext()); }
+. { errores.add("Error en la linea " + yyline + " columna " + yycolumn + ": " + yytext());}
