@@ -3,11 +3,9 @@ Desarrollo de lenguaje compilador
 
 
 ## Consejo de Creador
->Si desea aprender hacerca de compiladores:
->para más detalles sobre **Como crear un compilador** [Creacion.md](./Creacion.md).
-
-> Para más detalles técnicos sobre el lenguaje y su implementación [Tecnico.md](./Proyecto_compi/src/Reportes/Tecnico.md).
-
+>❗ **Important**  
+> Si desea aprender acerca de compiladores: para más detalles sobre **Cómo crear un compilador** [Creacion.md](./Creacion.md).  
+> Para más detalles técnicos sobre el lenguaje y su implementación [Tecnico.md](./Proyecto_compi/src/Reportes/Tecnico.md).  
 > Para información sobre cómo utilizar el proyecto [Usuario.md](./Proyecto_compi/src/Reportes/Usuario.md).
 
 ## Entrada
